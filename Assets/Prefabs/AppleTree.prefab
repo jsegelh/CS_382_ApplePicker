@@ -67,7 +67,7 @@ MonoBehaviour:
   speed: 10
   leftAndRightEdge: 24
   changeDirChance: 0.02
-  appleDropDelay: 1
+  appleDropDelay: 0.5
 --- !u!1 &5357640842319290289
 GameObject:
   m_ObjectHideFlags: 0
