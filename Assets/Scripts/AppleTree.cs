@@ -27,6 +27,8 @@ public class AppleTree : MonoBehaviour{
     }
 
     void DropApple(){
+        if(ApplePicker.isGameOver) return;
+
         GameObject apple = Instantiate<GameObject>(applePrefab);
         apple.transform.position = transform.position;
         Invoke("DropApple", appleDropDelay);
@@ -34,6 +36,8 @@ public class AppleTree : MonoBehaviour{
 
     // Update is called once per frame
     void Update(){
+        if(ApplePicker.isGameOver) return;
+
         // Basic Movement
         Vector3 pos = transform.position;
         pos.x += speed * Time.deltaTime;
@@ -52,6 +56,8 @@ public class AppleTree : MonoBehaviour{
     }
 
     void FixedUpdate(){
+        if(ApplePicker.isGameOver) return;
+
         if(Random.value < changeDirChance){
             speed *= -1; // Change direction
         }

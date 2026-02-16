@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ApplePicker : MonoBehaviour{
     [Header("Inscribed")]
@@ -10,9 +10,17 @@ public class ApplePicker : MonoBehaviour{
     public float basketBottomY = -14f;
     public float basketSpacingY = 2f;
     public List<GameObject> basketList;
+    public GameObject restartButton;
+    static public bool isGameOver;
 
     // Start is called before the first frame update
     void Start(){
+        isGameOver = false;
+
+        // Find the restart button and deactivate it
+        restartButton = GameObject.Find("RestartButton");
+        restartButton.SetActive(false);
+
         basketList = new List<GameObject>();
         for(int i = 0; i < numBaskets; i++){
             GameObject tBasketGO = Instantiate<GameObject>(basketPrefab);
@@ -21,6 +29,9 @@ public class ApplePicker : MonoBehaviour{
             tBasketGO.transform.position = pos;
             basketList.Add(tBasketGO);
         }
+
+        // Update the round number display
+        UpdateRoundInfo();
     }
 
     public void AppleMissed(){
@@ -42,10 +53,26 @@ public class ApplePicker : MonoBehaviour{
         basketList.RemoveAt(basketIndex);
         Destroy(basketGO);
 
-        // If there are no Baskets left, restart the game
+        // Update the round number display
+        UpdateRoundInfo();
+
+        // If there are no Baskets left, display the restart button
         if(basketList.Count == 0){
-            SceneManager.LoadScene("_Scene_0");
+            restartButton.SetActive(true);
+            isGameOver = true;
+
+            // SceneManager.LoadScene("_Scene_0");
         }
 
+    }
+
+    private void UpdateRoundInfo(){
+        // Update round number (0 = game over)
+        if(basketList.Count <= 0){
+            RoundInfo.roundNum = 0;
+        }
+        else{
+            RoundInfo.roundNum = numBaskets - basketList.Count + 1;
+        }
     }
 }

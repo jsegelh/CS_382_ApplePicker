@@ -15,6 +15,8 @@ public class Basket : MonoBehaviour{
 
     // Update is called once per frame
     void Update(){
+        if(ApplePicker.isGameOver) return;
+
         // Get the current screen position of the mouse from Input
         Vector3 mousePos2D = Input.mousePosition;
 
