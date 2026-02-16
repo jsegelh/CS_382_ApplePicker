@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,15 +32,10 @@ public class ApplePicker : MonoBehaviour{
         }
 
         // Update the round number display
-        UpdateRoundInfo();
+        UpdateRoundInfo(false);
     }
 
     public void AppleMissed(){
-        // Destroy all of the falling Apples
-        GameObject[] appleArray = GameObject.FindGameObjectsWithTag("Apple");
-        foreach(GameObject tempGO in appleArray){
-            Destroy(tempGO);
-        }
 
         // Destroy one of the Baskets
 
@@ -53,26 +49,50 @@ public class ApplePicker : MonoBehaviour{
         basketList.RemoveAt(basketIndex);
         Destroy(basketGO);
 
-        // Update the round number display
-        UpdateRoundInfo();
-
-        // If there are no Baskets left, display the restart button
         if(basketList.Count == 0){
-            restartButton.SetActive(true);
-            isGameOver = true;
-
-            // SceneManager.LoadScene("_Scene_0");
+            GameOver();
         }
-
+        else{
+            DestroyAllFallingObjects();
+            UpdateRoundInfo(false);
+        }
     }
 
-    private void UpdateRoundInfo(){
+    public void GameOver(){
+        // Destroy all apples and branches
+        DestroyAllFallingObjects();
+
+        // Notify other GameObjects that the game ended
+        isGameOver = true;
+
+        // Update the round to 0 (game over)
+        UpdateRoundInfo(true);
+
+        // Display the restart button
+        restartButton.SetActive(true);
+    }
+
+    private void UpdateRoundInfo(bool isGameOver){
         // Update round number (0 = game over)
-        if(basketList.Count <= 0){
+        if(isGameOver){
             RoundInfo.roundNum = 0;
         }
         else{
             RoundInfo.roundNum = numBaskets - basketList.Count + 1;
+        }
+    }
+
+    private void DestroyAllFallingObjects(){
+        // Destroy all of the falling Apples and Branches
+        GameObject[] appleArray = GameObject.FindGameObjectsWithTag("Apple");
+        GameObject[] branchArray = GameObject.FindGameObjectsWithTag("Branch");
+
+        foreach(GameObject tempGO in appleArray){
+            Destroy(tempGO);
+        }
+
+        foreach(GameObject tempGO in branchArray){
+            Destroy(tempGO);
         }
     }
 }

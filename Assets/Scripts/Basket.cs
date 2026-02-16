@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class Basket : MonoBehaviour{
     public ScoreCounter scoreCounter;
+    public ApplePicker applePicker;
 
     // Start is called before the first frame update
     void Start(){
         // Find a GameObject named ScoreCounter in the Scene Hierarchy
         GameObject scoreGO = GameObject.Find("ScoreCounter");
-        // Get teh ScoreCounter (Script) component of scoreGO
+        // Get the ScoreCounter (Script) component of scoreGO
         scoreCounter = scoreGO.GetComponent<ScoreCounter>();
+
+        // Get the applePicker component
+        applePicker = Camera.main.GetComponent<ApplePicker>();
     }
 
     // Update is called once per frame
@@ -41,6 +45,12 @@ public class Basket : MonoBehaviour{
             // Increase the score
             scoreCounter.score += 100;
             HighScore.TRY_SET_HIGH_SCORE(scoreCounter.score);
+        }
+        else if(collidedWith.CompareTag("Branch")){
+            Destroy(collidedWith);
+
+            // End the game
+            applePicker.GameOver();
         }
     }
 }

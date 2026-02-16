@@ -8,6 +8,9 @@ public class AppleTree : MonoBehaviour{
     // Prefab for instatiating apples
     public GameObject applePrefab;
 
+    // Prefab for instatiating branches
+    public GameObject branchPrefab;
+
     // Speed at which the AppleTree moves
     public float speed = 1f;
 
@@ -17,8 +20,11 @@ public class AppleTree : MonoBehaviour{
     // Chance that the AppleTree will change directions
     public float changeDirChance = 0.1f;
 
-    //Seconds between Apples instantiations
+    // Seconds between Apples instantiations
     public float appleDropDelay = 1f;
+
+    // Change that the AppleTree will drop a branch;
+    public float branchDropChance = 0.1f;
 
     // Start is called before the first frame update
     void Start(){
@@ -29,8 +35,14 @@ public class AppleTree : MonoBehaviour{
     void DropApple(){
         if(ApplePicker.isGameOver) return;
 
-        GameObject apple = Instantiate<GameObject>(applePrefab);
-        apple.transform.position = transform.position;
+        if(Random.value < branchDropChance){
+            GameObject branch = Instantiate<GameObject>(branchPrefab);
+            branch.transform.position = transform.position;
+        }
+        else{
+            GameObject apple = Instantiate<GameObject>(applePrefab);
+            apple.transform.position = transform.position;
+        }
         Invoke("DropApple", appleDropDelay);
     }
 
